@@ -5,6 +5,7 @@ import { app } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../helper/port";
+import { Loader2 } from "lucide-react";
 
 
 const auth = getAuth(app);
@@ -14,6 +15,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -45,17 +47,21 @@ const Signup = () => {
 
 
   const sendOtpToEmail = async () => {
+    setLoading(true)
     try {
       const response = await axios.post(`${BASE_URL}/api/send-otp`, { email });
       toast.success("OTP sent to email.");
       setShowOtpInput(true);
+      setLoading(false)
     } catch (error) {
       console.error("Error sending OTP:", error);
       toast.error("Failed to send OTP.");
+      setLoading(false)
     }
   };
 
 const verifyOtp = async () => {
+    setLoading(true)
   try {
     
     const response = await axios.post(`${BASE_URL}/api/verify-otp`, { email, otp });
@@ -74,10 +80,12 @@ const verifyOtp = async () => {
 
   
     navigate("/dashboard");
+    setLoading(false)
     toast.success("Login Successful");
   } catch (error) {
     console.error("OTP verification failed:", error);
     toast.error("Invalid or expired OTP.");
+    setLoading(false)
   }
 };
 
@@ -117,8 +125,20 @@ const verifyOtp = async () => {
           <button
             onClick={sendOtpToEmail}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 mb-2"
+            disabled={loading}
           >
-            Send OTP to Email
+            {loading? (
+                <div className=" flex items-center justify-center">
+                    <Loader2 className=" animate-spin text-white text-center"/>
+                </div>
+
+            ):(
+            " Send OTP to Email"
+
+            )
+           
+            }
+           
           </button>
 
       
@@ -134,8 +154,20 @@ const verifyOtp = async () => {
               <button
                 onClick={verifyOtp}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"
+                disabled={loading}
               >
-                Verify OTP
+
+              {loading? (
+                <div className=" flex items-center justify-center">
+                    <Loader2 className=" animate-spin text-white text-center"/>
+                </div>
+
+            ):(
+            " Verify Otp"
+
+            )
+           
+            }
               </button>
             </>
           )}
