@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { sendOtp, verifyOtp } from "./controllers/otpController";
 import userRoutes from "./routes/userRoutes"; 
+import noteRoutes from "./routes/noteRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +32,7 @@ mongoose
 app.post("/api/send-otp", sendOtp);
 app.post("/api/verify-otp", verifyOtp);
 app.use("/api/users", userRoutes);
+app.use("/api/notes", noteRoutes);
 
 // Start Server
 app.listen(PORT, () => {
