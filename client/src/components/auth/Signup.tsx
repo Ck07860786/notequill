@@ -49,7 +49,7 @@ const Signup = () => {
   const sendOtpToEmail = async () => {
     setLoading(true)
     try {
-      const response = await axios.post(`${BASE_URL}/api/send-otp`, { email });
+      await axios.post(`${BASE_URL}/api/send-otp`, { email });
       toast.success("OTP sent to email.");
       setShowOtpInput(true);
       setLoading(false)
@@ -64,7 +64,7 @@ const verifyOtp = async () => {
     setLoading(true)
   try {
     
-    const response = await axios.post(`${BASE_URL}/api/verify-otp`, { email, otp });
+     await axios.post(`${BASE_URL}/api/verify-otp`, { email, otp });
 
   
     localStorage.setItem("userEmail", email);
